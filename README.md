@@ -62,8 +62,11 @@ make build && make run_app
 
 ## Deployed on Heroku
 
-Demo here:
-https://docker-flask-sokcets-mongodb-api.herokuapp.com/
+Link for Home page:
+https://docker-flask-sokcets-mongodb.herokuapp.com/
+
+Link for Socket Demo Page:
+https://docker-flask-sokcets-mongodb.herokuapp.com/socket-frontend
 
 
 ## Tests

@@ -84,8 +84,10 @@ class DriverPositionRepository(MongoBaseRepository):
                 "near": [pickup_location.get_lat(), pickup_location.get_long()],
                 "distanceField": "radial_distance",
                 "spherical": True,
-                "limit": 2
-            }
+            },
+        },
+        {
+            "$limit": 2,
         }]
         command_result = self.collection.aggregate(pipeline)
         command_result = list(command_result)
