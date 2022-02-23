@@ -1,0 +1,10 @@
+__pycache__/
+docker/py_cache/
+docker/mongo/
+docker/bash_history.log
+.vscode/
+.git/
+.env
+*.pyc
+tmp/
+/static/

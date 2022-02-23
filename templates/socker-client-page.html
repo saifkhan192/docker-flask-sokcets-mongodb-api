@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script type="text/javascript" src="https://cdn.socket.io/3.1.1/socket.io.js"></script>
+    </head>
+    <body style="margin: auto;width: 993px;padding-top: 40px;">
+		{% for driver in driverList %}
+			<span class="form-inline" action="">
+				<div class="form-group">
+					<label for="email">Driever:</label>
+					<input type="text" name="driver" value="{{driver._id}}" class="form-control" >
+				</div>
+				<div class="form-group">
+				<label for="email">Latitude:</label>
+				<input type="email" name="latitude" value="{{driver.position.latitude}}" class="form-control" >
+				</div>
+				<div class="form-group">
+					<label for="email">Longitude:</label>
+					<input type="email" name="longitude" value="{{driver.position.longitude}}" class="form-control" >
+				</div>
+				<div class="checkbox">
+				<label><input type="checkbox" name="is_available"> Available</label>
+				</div>
+				<button type="submit" class="btn btn-info submitBtn">Submit</button>
+			</span>
+			<br><br>
+		{% endfor %}
+		<hr />
+		<div id="msgbox"></div>
+		<script >
+			socket = io();
+			socket.on('message', function(serverSessage) {
+				var data = JSON.parse(serverSessage);
+				console.log('serverSessage',data);
+				$("#msgbox").append("from rerver: "+serverSessage+"<br>");
+				// $("#msgbox").append("from erver: "+JSON.stringify(msg)+"<hr>");
+			});
+			socket.on('update', function(message) {
+				var data = JSON.parse(message);
+				console.log('update serverSessage',data);
+			});
+			function submitBtnClick(btn)
+			{
+				let div = btn.parent(".form-inline");
+				let driver = div.find("input[name=driver]").val().trim();
+				let latitude = div.find("input[name=latitude]").val().trim();
+				let longitude = div.find("input[name=longitude]").val().trim();
+				let is_available = div.find("input[name=is_available]").is(":checked");
+				let msgPayload = {
+					'driver':driver,
+					'latitude':latitude,
+					'longitude':longitude,
+					'is_available':is_available,
+				};
+				let jsonStr = JSON.stringify(msgPayload);
+				socket.send("send from client:"+jsonStr);
+				// socket.emit('update', jsonStr);
+				$("#msgbox").append(jsonStr+"<br>");
+			}
+			$(document).ready(function(){
+				$(".submitBtn").click(function(){
+					let btn = $(this);
+					submitBtnClick(btn);
+				});
+			});
+        </script>
+    </body>
+</html>
+
+

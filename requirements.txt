@@ -1,0 +1,12 @@
+Flask==1.1.1
+Flask-PyMongo>=2.0.0
+redis
+pymongo[tls,srv]
+requests==2.21.0
+urllib3==1.24.1
+pytest==6.1.2
+itsdangerous==2.0.1
+MarkupSafe
+Jinja2
+gunicorn==20.0.4
+Flask-SocketIO

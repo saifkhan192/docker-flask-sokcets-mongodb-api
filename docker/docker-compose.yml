@@ -1,0 +1,40 @@
+version: '3.4'
+services:
+
+  flask_app:
+    build:
+      context: ../
+      dockerfile: ./docker/DockerfileApp
+    ports:
+      - 80:5000
+      - 5678:5678 #ptvsd debugger 
+      - 65432:65432 #socket port try
+      - "3000:3000" # remote debugger attach port try
+    container_name: flask_app
+    env_file:
+      - ../.env
+    # command: sh -c "/bin/bash"
+    # command: flask run --host 0.0.0.0 # host=0.0.0.0 to make sure you can connect through Dockers networking
+    environment:
+      PYTHONPYCACHEPREFIX: "/app/docker/py_cache"
+    volumes:
+      - ../:/app
+      - ./bash_history.log:/root/.bash_history #container bash history will remain persist
+    links:
+      - mongodb:mongodb
+      - redis_service
+
+  mongodb:
+    image: mongo:3.6
+    container_name: mongodb
+    command: mongod --noprealloc
+    ports:
+      - 27017:27017
+    volumes:
+      - ./mongo/data:/data/db
+
+  redis_service:
+    image: redis
+    container_name: redis_service
+    ports:
+      - "6380:6379"
